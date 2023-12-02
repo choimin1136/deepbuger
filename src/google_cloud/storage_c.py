@@ -24,9 +24,9 @@ class GCS:
         # ACL object means
         predefined_default_object_acl='public-read'
 
-        bucket = client.bucket(bucket_name)
+        bucket = self.client.bucket(bucket_name)
         bucket.storage_class=storage_class
-        bucket = client.create_bucket(
+        bucket = self.client.create_bucket(
             bucket,
             location=location,
             predefined_acl=predefined_acl,
