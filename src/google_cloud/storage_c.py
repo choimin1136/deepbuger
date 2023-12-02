@@ -3,7 +3,7 @@ from google.oauth2 import service_account
 
 class GCS:
     def __init__(self):
-        self.KEY_PATH="/Users/hyeok/Desktop/Development/Python/deepbuger/src/google_cloud/config/deepbuger-d6edb63d6840.json"
+        self.KEY_PATH="src/google_cloud/config/deepbuger-d6edb63d6840.json"
         self.project_id = 'fake-id-403700'
         # buket name
         self.bucket_name = 'deep_fake_dataset'

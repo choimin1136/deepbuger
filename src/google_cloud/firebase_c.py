@@ -13,7 +13,7 @@ class GCFS:
     #         cls._initialized = True
 
     def __init__(self):
-        self.KEY_PATH='/Users/hyeok/Desktop/Development/Python/deepbuger/src/google_cloud/config/fake-24f85-firebase-adminsdk-siobk-4087a6ab01.json'
+        self.KEY_PATH='src/google_cloud/config/fake-24f85-firebase-adminsdk-siobk-4087a6ab01.json'
         self.cred = credentials.Certificate(self.KEY_PATH)
         self.collection_name='predicts'
         self.db = None  # 초기화를 나중에 수행하기 위해 None으로 초기화

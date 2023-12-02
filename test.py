@@ -51,5 +51,5 @@ def test(video_path,model_path):
     return persent_output
 
 if __name__== '__main__':
-    persent_output=test(video_path='.\\videos\\jisoo.mp4',model_path="./models/11_deepburger.pkl")
+    persent_output=test(video_path='https://storage.googleapis.com/deep_fake_dataset/input/6537b658-b180-4d3b-9c82-d185675b74b3.mp4',model_path="./models/11_deepburger.pkl")
     print(persent_output)
