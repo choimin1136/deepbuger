@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from src.google_cloud.storage_c import GCS
 from src.google_cloud.firebase_c import GCFS
 from src.fake_id.detect_from_video import test_full_image_network
+from DEEPBUGER.test import test
 
 
 gcs=GCS()
@@ -53,9 +54,14 @@ async def create_files(files: UploadFile):
 
     # model_path=""
     output_path="./downloader/output"
-    # output,predict=test_full_image_network(url,model_path,output_path,start_frame=0,end_frame=None,cuda=True)
-    output=url
+    
     predict=67.08
+    output=url
+    # output,predict=test_full_image_network(url,model_path,output_path,start_frame=0,end_frame=None,cuda=True)
+    video_path='./DEEPBUGER/videos/jisoo.mp4'
+    model_path="./DEEPBUGER/models/11_deepburger.pkl"
+    predict=test(video_path=video_path,model_path=model_path)
+    
 
 
     fb.insert_data(url,predict)
