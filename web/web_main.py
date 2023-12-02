@@ -1,6 +1,9 @@
 import streamlit as st
 from st_circular_progress import CircularProgress
 import requests
+import tempfile
+import cv2
+import json
 
 
 
@@ -11,10 +14,31 @@ empty1, con1, empty2 = st.columns([1,8,1])
 video=None
 
 def model_predict(data):
+    tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
+    tfile.write(data.read())
+    video = open(tfile.name,'rb')
     
-    print(data)
+    file = {
+        'file' : video
+    }
     
+    url = 'http://127.0.0.1:8000/files/'
+    x = requests.post(url=url,files=file)
+    response = json.loads(x.text)
+    result = response['result']
+    print(result)
+    return result
+
+def change_progress(result):
+    color= 'red' if int(result) > 50 else'green'
+    my_circular_progress.update_value(int(result))
+    my_circular_progress.color=color
     
+my_circular_progress=CircularProgress(
+            label='Fake or Real',
+            value=0,
+            color="white",
+            size='large')
 
 with empty1:
     st.empty()
@@ -27,23 +51,28 @@ with con1:
     with col1:
         st.text('col1')
         if video:
-            st.video(video)
+            data=st.video(video)
+            print(type(data))
         else:
-            st.image('web/assets/not_found_video.png',use_column_width=True)
+            st.video('https://youtu.be/bsrrCyn5L5I?si=ntDF2WQZBqvwev5H')
 
 
     with col2:
+        result=0
         st.text('col2')
-        st.button('분석하기',use_container_width=True, on_click=model_predict(video))
+        if video:
+            if st.button('분석하기',use_container_width=True):
+                result = model_predict(video)
+                change_progress(result)
+        else:
+            st.warning("분석할 영상을 입력해주세요")
 
+        
         st.header('분석결과 : Fake')
     
-        my_circular_progress=CircularProgress(
-            label='Fake or Real',
-            value=78,
-            color='red',
-            size='large')
+        
+        # my_circular_progress.st_circular_progress()
+        
         my_circular_progress.st_circular_progress()
-    
 with empty2:
     st.empty()

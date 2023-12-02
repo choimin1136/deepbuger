@@ -42,14 +42,13 @@ class Item(BaseModel):
 
 
 @app.post("/files/")
-async def create_files(files: UploadFile):
-    print(files.content_type)
+async def create_files(file: bytes = File()):
+    print(type(file))
     UPLOAD_DIR = "./downloader"
-    content = await files.read()
     filename=f"{str(uuid.uuid4())}.mp4"
 
     # storage 저장
-    url=gcs.upload_to_bucket("input/",filename,content)
+    url=gcs.upload_to_bucket("input/",filename,file)
 
     # model_path=""
     output_path="./downloader/output"
