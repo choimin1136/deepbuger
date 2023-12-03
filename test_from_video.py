@@ -56,7 +56,7 @@ def test_from_video(video_path, cuda=True):
     num_frames = int(reader.get(cv2.CAP_PROP_FRAME_COUNT))
 
     fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-    video_fn = video_path.split('/')[-1].split('.')[0]+'.avi'
+    video_fn = video_path.split('/')[-1].split('.')[0]+'.mp4'
     writer = None
 
     face_detector = YoloDetector()
@@ -88,7 +88,7 @@ def test_from_video(video_path, cuda=True):
         bboxes,_=face_detector.predict(image)
 
         if writer is None:
-            writer = cv2.VideoWriter(os.path.join('./outputs', video_fn), fourcc, fps,
+            writer = cv2.VideoWriter(os.path.join('./downloader', video_fn), 0x00000021, fps,
                                      (height, width)[::-1])
             
         if len(bboxes[0]):
@@ -124,9 +124,13 @@ def test_from_video(video_path, cuda=True):
         cv2.imshow('test', image)
         cv2.waitKey(33)
         writer.write(image)
-
+        
     if writer is not None:
         writer.release()
+    cv2.destroyAllWindows()
+        
+    return os.path.join('./downloader', video_fn),fake_percentage
 
 if __name__== '__main__':
-    test_from_video(video_path='./videos/jisoo.mp4')
+    output,result=test_from_video(video_path='./videos/jisoo.mp4')
+    print(output,result)

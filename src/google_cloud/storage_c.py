@@ -1,5 +1,6 @@
 from google.cloud import storage
 from google.oauth2 import service_account
+import os
 
 class GCS:
     def __init__(self):
@@ -37,8 +38,10 @@ class GCS:
     def upload_to_bucket(self,folder_name,blob_name,file_path):
         bucket=self.client.bucket(self.bucket_name)
         blob=bucket.blob((folder_name+blob_name))
-        blob.upload_from_string(file_path,content_type='video/mp4')
-
+        if type(file_path)==type(bytes()):
+            blob.upload_from_string(file_path,content_type='video/mp4')
+        elif type(file_path)==type(str()):
+            blob.upload_from_filename(file_path,content_type='video/mp4')
         blob.make_public()
 
         url = blob.public_url

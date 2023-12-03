@@ -1,13 +1,14 @@
 from typing import Annotated
 import uuid
 import os
+import shutil
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from src.google_cloud.storage_c import GCS
 from src.google_cloud.firebase_c import GCFS
-from test import test
+from test_from_video import test_from_video
 
 
 gcs=GCS()
@@ -48,26 +49,31 @@ async def create_files(file: bytes = File()):
     filename=f"{str(uuid.uuid4())}.mp4"
 
     # storage 저장
-    url=gcs.upload_to_bucket("input/",filename,file)
+    # print(type(file)==type(bytes()))
+    input_url=gcs.upload_to_bucket("input/",filename,file)
 
     # model_path=""
-    output_path="./downloader/output"
+    # output_path="./downloader/output"
     
-    predict=67.08
-    output=url
+    # predict=67.08
     # output,predict=test_full_image_network(url,model_path,output_path,start_frame=0,end_frame=None,cuda=True)
-    # video_path='./DEEPBUGER/videos/jisoo.mp4'
     model_path="./models/11_deepburger.pkl"
-    predict=test(video_path=url,model_path=model_path)
+    output,result =test_from_video(video_path=input_url)
     
+    # print(type(output)==type(str()))
+    output_url=gcs.upload_to_bucket("output/",filename,output)
 
 
-    fb.insert_data(url,predict)
-
+    fb.insert_data(input_url,output_url,result)
+    
+    if os.path.isfile(output):
+        os.remove(output)
     # with open(os.path.join(UPLOAD_DIR, filename), "wb") as fp:
     #     fp.write(content)
+    
+    
 
-    return {"output": url, "result":predict}
+    return {"output": output_url, "result":result}
 
 
     # return dataset

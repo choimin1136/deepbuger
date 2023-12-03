@@ -44,7 +44,7 @@ class GCFS:
     def update_data(self,db):
         pass
 
-    def insert_data(self,filepath,predict=0.00):
+    def insert_data(self,input_url,output_url,predict=0.00):
         self.initialize_db()
         if predict >= 50.00:
             result = True
@@ -54,7 +54,8 @@ class GCFS:
         doc_ref = self.db.collection(self.collection_name).document(str(id))
         print(f"create new document id : {id}")
         doc_ref.set({
-            u'filepath':filepath,
+            u'input_url':input_url,
+            u'output_url':output_url,
             u'predict':predict,
             u'result':result,
         })
